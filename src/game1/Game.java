@@ -4,9 +4,9 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-public class GameRandom {
+public class Game {
     private int max;
-    private int chances = 3;
+    private int chances;
     private int number;
     private Set<Integer> guesses = new HashSet<>();
 
@@ -14,34 +14,25 @@ public class GameRandom {
     private Boolean running = true;
     private Boolean result; //true is a win, false is a loss
 
-    public Boolean run(int max, int chances) {
+    private String method;
+
+    public Boolean run(int max, int chances, String method) {
         this.max = max;
         this.chances = chances;
+        this.method = method;
         number = rand.nextInt(max) + 1;
-
-        //System.out.println("max: " + max + " chances: " + chances + " number is " + number);
-
         while(running == true) {
             loop();
         }
-
-        //System.out.println("finished. Result is " + result);
-
         return result;
     }
 
     private void loop() {
-        int guess = rand.nextInt(max) + 1;  
-        while(guesses.contains(guess)) {
-            //System.out.println("Wanted to guess " + guess + " but already guessed that.");
-            guess = rand.nextInt(max) + 1;
+        int guess = -100;
+        if(method == "Random") {
+            guess = getRandomGuess();
         }
-        
-        // System.out.println("Guess is " + guess);
-        // System.out.println("Already guessed:");
-        // for (int i : guesses) {
-        //     System.out.println(i);
-        // }
+        else if(method == )
 
         guesses.add(guess);
         if(check(guess)) {
@@ -50,9 +41,6 @@ public class GameRandom {
         }
         else {
             chances--;
-
-            //System.out.println("remaining chances = " + chances);
-
             if(chances == 0) {
                 running = false;
                 result = false;
@@ -65,5 +53,13 @@ public class GameRandom {
             return true;
         }
         return false;
+    }
+
+    private int getRandomGuess() {
+        int guess = rand.nextInt(max) + 1;  
+        while(guesses.contains(guess)) {
+            guess = rand.nextInt(max) + 1;
+        }
+        return guess;
     }
 }

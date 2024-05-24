@@ -1,34 +1,34 @@
 package game1;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class DataCollector {
 
-    public DataCollector(int runs) {
+    private void run(int runs, int max, int chances, String method) {
         int wins = 0;
         for (int index = 0; index < runs; index++) {
-            GameRandom gameRandom = new GameRandom();
-            Boolean result = gameRandom.run(10, 3);
+            Game game = new Game();
+            Boolean result = game.run(max, chances, method);
             if(result) {
                 wins++;
             }
         }
-        record(runs, wins);
+        record(runs, wins, method);
     }
 
-    private void record(int runs, int wins) {
-        double winRate = (double)runs/(double)wins;
+    private void record(int runs, int wins, String method) {
+        double winRate = (double)wins/(double)runs;
         double e = Math.pow(10, 4);
         winRate = Math.round(winRate * e)/e;
         
         String date = LocalDate.now().toString();
         String time = LocalTime.now().toString();
 
-        String title =  date + ", " + time;
+        String title =  method + "," + date + ", " + time;
         String content = "Date: " + date
                      + "\nTime: " + time
+                     + "\nMethod: " + method
                      + "\nRuns: " + runs
                      + "\nWins: " + wins
                      + "\nWin Rate: " + winRate;
@@ -36,7 +36,8 @@ public class DataCollector {
         DataManager.writeToFile(content, "data/" + title);
     }
 
-    public static void main(String[] args) {
-        DataCollector dataCollector = new DataCollector(1000);
+    public void main(String[] args) {
+        run(1000000, 10, 3, "Random");
+        run(1000000, 10, 3, "Strategic");
     }
 }
