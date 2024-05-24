@@ -12,19 +12,16 @@ public class GameRandom {
 
     private Random rand = new Random();
     private Boolean running = true;
-    
+    private Boolean result; //true is a win, false is a loss
 
-    private GameRandom(int max, int chances) {
+    public Boolean run(int max, int chances) {
         this.max = max;
         this.chances = chances;
-        run();
-    }
-
-    private void run() {
         number = rand.nextInt(max) + 1;
         while(running == true) {
             loop();
         }
+        return result;
     }
 
     private void loop() {
@@ -35,11 +32,13 @@ public class GameRandom {
         guesses.add(guess);
         if(check(guess)) {
             running = false;
+            result = true;
         }
         else {
             chances--;
             if(chances == 0) {
                 running = false;
+                result = false;
             }
         }
     }
