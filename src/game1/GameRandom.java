@@ -18,17 +18,31 @@ public class GameRandom {
         this.max = max;
         this.chances = chances;
         number = rand.nextInt(max) + 1;
+
+        //System.out.println("max: " + max + " chances: " + chances + " number is " + number);
+
         while(running == true) {
             loop();
         }
+
+        //System.out.println("finished. Result is " + result);
+
         return result;
     }
 
     private void loop() {
         int guess = rand.nextInt(max) + 1;  
         while(guesses.contains(guess)) {
+            //System.out.println("Wanted to guess " + guess + " but already guessed that.");
             guess = rand.nextInt(max) + 1;
         }
+        
+        // System.out.println("Guess is " + guess);
+        // System.out.println("Already guessed:");
+        // for (int i : guesses) {
+        //     System.out.println(i);
+        // }
+
         guesses.add(guess);
         if(check(guess)) {
             running = false;
@@ -36,6 +50,9 @@ public class GameRandom {
         }
         else {
             chances--;
+
+            //System.out.println("remaining chances = " + chances);
+
             if(chances == 0) {
                 running = false;
                 result = false;
