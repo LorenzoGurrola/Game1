@@ -11,8 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataManager {
-    private static List<DataPackage> = 
-    public static void run(int runs, int max, int chances, int delta, List<String> methods, Boolean debug) {
+    private List<DataPackage> dataPackages = new ArrayList<>();
+    private List<String> methods = new ArrayList<>();
+
+    public DataManager(int runs, int max, int chances, int delta, List<String> methods, Boolean debug) {
+        this.methods = methods;
+        run(runs, max, chances, delta, methods, debug);
+    }
+
+    public void run(int runs, int max, int chances, int delta, List<String> methods, Boolean debug) {
         for (String method : methods) {
             System.out.println("method is " + method);
             int wins = 0;
@@ -23,21 +30,27 @@ public class DataManager {
                         wins++;
                     }
             }
-            record(runs, wins, delta, method);
+            dataPackages.add(new DataPackage(runs, wins, max, delta, method));
+        }
+        record();
+    }
+
+    private void record() {
+        for (DataPackage dataPackage : dataPackages) {
+            int runs = dataPackage.getRuns();
+            int wins = dataPackage.getWins();
+            int delta = dataPackage.getDelta();
+            double winRate = createWinRate(runs, wins, delta);
+            String date = LocalDate.now().toString();
+            String time = LocalTime.now().toString();
+            String title = createFileTitle(methods, date);
+            String content = createFileContent(date, time, methods, runs, wins, winRate);
+            DataManager.writeToFile(content, "data/" + title, true); 
         }
         
     }
-
-    private static void record(int runs, int wins, int delta, String methods) {
-        double winRate = createWinRate(runs, wins, delta);
-        String date = LocalDate.now().toString();
-        String time = LocalTime.now().toString();
-        String title = createFileTitle(methods, date);
-        String content = createFileContent(date, time, methods, runs, wins, winRate);
-        DataManager.writeToFile(content, "data/" + title, true); 
-    }
     
-    private static void writeToFile(String content, String filePath, Boolean append) {
+    private void writeToFile(String content, String filePath, Boolean append) {
         try (FileWriter fileWriter = new FileWriter(filePath, append);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
             bufferedWriter.write(content);
@@ -47,7 +60,7 @@ public class DataManager {
         }
     }
 
-    public static int readIntFromFile(String filePath) {
+    public int readIntFromFile(String filePath) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line = reader.readLine();
             return Integer.parseInt(line);
@@ -58,21 +71,21 @@ public class DataManager {
         }
     }
 
-    private static double createWinRate(int runs, int wins, int delta) {
+    private double createWinRate(int runs, int wins, int delta) {
         double winRate = (double)wins/(double)runs;
         double round = Math.pow(10, delta);
         winRate = Math.round(winRate * round)/round;
         return winRate;
     }
 
-    private static String createFileTitle(String methods, String date) {
+    private String createFileTitle(String methods, String date) {
         int stamp = readIntFromFile("res/stamp.txt");
         String title =  stamp + methods + ", " + date;
         writeToFile(stamp+1 + "", "res/stamp.txt", false);
         return title;
     }
 
-    private static String createFileContent(String date, String time, String method, int runs, int wins, double winRate) {
+    private String createFileContent(String date, String time, String method, int runs, int wins, double winRate) {
         String content = "Date: " + date
                        + "\nTime: " + time
                        + "\nMethod: " + method
