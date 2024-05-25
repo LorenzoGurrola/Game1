@@ -1,12 +1,11 @@
 package game1;
 
+import java.util.List;
+
 public class Control {
     //r = random
     //s = strategic
     public static void main(String[] args) { 
-        for (int index = 0; index < 100; index++) {
-            DataManager.run(100, 10, 2, 3, "r", false);
-        }
-        
+        DataManager.run(1, 10, 2, 3, List.of("s","r"), false);
     }
 }

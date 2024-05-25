@@ -28,7 +28,7 @@ public class Game {
             input = new StrategicInput(max, debug);
         }
         else {
-            System.out.println("Invalid method supplied.");
+            System.out.println("Invalid method supplied: " + method);
         }
         
         while(result == false && this.chances > 0) {
