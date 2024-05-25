@@ -6,67 +6,46 @@ import java.util.Random;
 import java.util.Set;
 
 public class Game {
+    private Boolean debug;
     private int number;
-    private Boolean running = true;
-    private Boolean result; //true is a win, false is a loss
+    private int chances;
+    private Boolean result = false; //true is a win, false is a loss
     
     private Random rand = new Random();
     private Input input;
 
-    public Boolean run(int max, int chances, String method) {
-        if(method == "r") {
-            input = new RandomInput(max, chances);
-        }
-        if(method == "s") {
-            input = new StrategicInput(max, chances);
-        }
+    public Boolean run(int max, int chances, String method, Boolean debug) {
+        this.debug = debug;
         number = rand.nextInt(max) + 1;
-        while(running == true) {
-            loop();
-        }
-        return result;
-    }
 
-    private void loop() {
-        if(chances == 0) {
-            running = false;
-            result = false;
-            int poop = input.getGuess();
+        debugPrint("\n\nNumber set to: " + number);
+        
+        this.chances = chances;
+        if(method == "r") {
+            input = new RandomInput(max, debug);
         }
-        int guess = Integer.MIN_VALUE;
-        if(method == "Random") {
-            guess = getRandomGuess();
-        }
-        else if(method == "Strategic") {
-            guess = getStrategicGuess();
+        else if(method == "s") {
+            input = new StrategicInput(max, debug);
         }
         else {
             System.out.println("Invalid method supplied.");
         }
-        if(check(guess) == "equals") {
-            running = false;
+        
+        while(result == false && this.chances > 0) {
+            loop();
+        }
+        debugPrint("Finished with a result of " + result);
+        return result;
+    }
+
+    private void loop() {
+        int guess = input.getGuess();
+        String feedback = check(guess);
+        input.setFeedback(feedback);
+        if(feedback == "equals") {
             result = true;
         }
-        else {
-            chances--;
-            if(check(guess) == "higher") {
-                feedback.add("higher");
-            }
-            else if(check(guess) == "lower") {
-                feedback.add("lower");
-            }
-            guesses.add(guess);
-        }
-        
-        System.out.println("Number: " + number);
-        System.out.println("Guesses:");
-        for (int g : guesses) {
-            System.out.println(g);
-        }
-        System.out.println("Feedback");
-        for (String f : feedback) {
-            System.out.println(f);
-        }
+        chances--;
     }
 
     private String check(int guess) {
@@ -79,7 +58,9 @@ public class Game {
         return "higher";
     }
 
-    
-
-    
+    private void debugPrint(String message) {
+        if(debug) {
+            System.err.println(message);
+        }
+    }
 }

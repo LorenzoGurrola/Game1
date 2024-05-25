@@ -5,11 +5,11 @@ import java.time.LocalTime;
 
 public class DataCollector {
 
-    private static void run(int runs, int max, int chances, String method) {
+    private static void run(int runs, int max, int chances, String method, Boolean debug) {
         int wins = 0;
         for (int index = 0; index < runs; index++) {
             Game game = new Game();
-            Boolean result = game.run(max, chances, method);
+            Boolean result = game.run(max, chances, method, debug);
             if(result) {
                 wins++;
             }
@@ -38,7 +38,7 @@ public class DataCollector {
 
     //r = Random, s = Strategic
     public static void main(String[] args) { 
-        //run(1000000, 10, 3, "r");
-        run(1, 13, 3, "s");
+        //run(1, 10, 3, "r");
+        run(1, 10, 3, "r", true);
     }
 }

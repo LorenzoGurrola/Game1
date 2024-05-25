@@ -5,27 +5,38 @@ import java.util.List;
 import java.util.Random;
 
 public class RandomInput implements Input{
+    private boolean debug;
     private int max;
-    private int chances;
     private List<Integer> guesses = new ArrayList<>();
-    private List<String> feedback = new ArrayList<>();
     private Random rand = new Random();
 
-    public RandomInput(int max, int chances) {
+    public RandomInput(int max, Boolean debug) {
         this.max = max;
-        this.chances = chances;
+        this.debug = debug;
     }
     
     @Override
     public int getGuess() {
         int guess = rand.nextInt(max) + 1;  
         while(guesses.contains(guess)) {
+            debugPrint("Was going to guess " + guess + " but we already guessed that.");
             guess = rand.nextInt(max) + 1;
         }
+        guesses.add(guess);
+
+        debugPrint("Guessing " + guess + " via the RandomInput method.");
         return guess; 
     }
 
     @Override
-    public void setFeedback() {
+    public void setFeedback(String feedback) {
+        //RandomInput does not need feedback
+    }
+
+    @Override
+    public void debugPrint(String message) {
+        if(debug) {
+            System.err.println(message);
+        }
     }
 }
