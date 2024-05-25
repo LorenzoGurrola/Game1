@@ -1,4 +1,4 @@
-package game1;
+package interactive;
 
 import java.util.Random;
 import java.util.Scanner;
@@ -13,11 +13,14 @@ public class GameInput {
     public GameInput() {
         run();
     }
+    public static void main(String[] args) {
+        GameInput gameInput = new GameInput();
+    }
 
     private void run() {
         System.out.println("Welcome to the game.");
         number = rand.nextInt(10) + 1;
-        while(running == true) {
+        while(running) {
             loop();
         }
     }
