@@ -36,8 +36,9 @@ public class DataCollector {
         DataManager.writeToFile(content, "data/" + title); 
     }
 
-    public static void main(String[] args) {
-        //run(1000000, 10, 3, "Random");
-        run(1, 13, 3, "Strategic");
+    //r = Random, s = Strategic
+    public static void main(String[] args) { 
+        //run(1000000, 10, 3, "r");
+        run(1, 13, 3, "s");
     }
 }
