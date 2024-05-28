@@ -21,7 +21,6 @@ public class DataManager {
 
     public void run(int runs, int max, int chances, int delta, List<String> methods, Boolean debug) {
         for (String method : methods) {
-            System.out.println("method is " + method);
             int wins = 0;
             for (int index = 0; index < runs; index++) {
                 Game game = new Game();
@@ -30,22 +29,25 @@ public class DataManager {
                         wins++;
                     }
             }
-            dataPackages.add(new DataPackage(runs, wins, max, delta, method));
+            dataPackages.add(new DataPackage(runs, wins, max, chances, delta, method));
         }
         record();
     }
 
     private void record() {
+        String date = LocalDate.now().toString();
+        String title = createFileTitle(date);
         for (DataPackage dataPackage : dataPackages) {
             int runs = dataPackage.getRuns();
             int wins = dataPackage.getWins();
+            int max = dataPackage.getMax();
+            int chances = dataPackage.getChances();
             int delta = dataPackage.getDelta();
+            String method = dataPackage.getMethod();
             double winRate = createWinRate(runs, wins, delta);
-            String date = LocalDate.now().toString();
             String time = LocalTime.now().toString();
-            String title = createFileTitle(methods, date);
-            String content = createFileContent(date, time, methods, runs, wins, winRate);
-            DataManager.writeToFile(content, "data/" + title, true); 
+            String content = createFileContent(date, time, method, runs, wins, winRate, max, chances);
+            writeToFile(content, "data/" + title, true); 
         }
         
     }
@@ -78,20 +80,33 @@ public class DataManager {
         return winRate;
     }
 
-    private String createFileTitle(String methods, String date) {
+    private String createFileTitle(String date) {
         int stamp = readIntFromFile("res/stamp.txt");
-        String title =  stamp + methods + ", " + date;
+        String methodsString = createMethodsString();
+        String title =  stamp + methodsString + ", " + date + ".txt";
         writeToFile(stamp+1 + "", "res/stamp.txt", false);
         return title;
     }
 
-    private String createFileContent(String date, String time, String method, int runs, int wins, double winRate) {
-        String content = "Date: " + date
+    private String createFileContent(String date, String time, String method, int runs, int wins, double winRate, int max, int chances) {
+        String content = "RANDOM NUMBER GAME STATS"
+                       + "\nDate: " + date
                        + "\nTime: " + time
                        + "\nMethod: " + method
                        + "\nRuns: " + runs
                        + "\nWins: " + wins
-                       + "\nWin Rate: " + winRate;
+                       + "\nWin Rate: " + winRate
+                       + "\nMax: " + max
+                       + "\nChances: " + chances
+                       + "\n-----\n";
         return content;
+    }
+
+    private String createMethodsString() {
+        String methodsString = "";
+        for (String method : methods) {
+            methodsString += method;
+        }
+        return methodsString;
     }
 }

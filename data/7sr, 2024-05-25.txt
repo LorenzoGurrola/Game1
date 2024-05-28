@@ -1,0 +1,20 @@
+RANDOM NUMBER GAME STATS
+Date: 2024-05-25
+Time: 17:16:17.087157
+Method: s
+Runs: 100000
+Wins: 100000
+Win Rate: 1.0
+Max: 10
+Chances: 4
+-----
+RANDOM NUMBER GAME STATS
+Date: 2024-05-25
+Time: 17:16:17.093755
+Method: r
+Runs: 100000
+Wins: 40043
+Win Rate: 0.4
+Max: 10
+Chances: 4
+-----

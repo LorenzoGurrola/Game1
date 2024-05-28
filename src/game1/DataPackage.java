@@ -1,13 +1,14 @@
 package game1;
 
 public class DataPackage {
-    private int runs, wins, max, delta;
+    private int runs, wins, max, chances, delta;
     private String method;
 
-    public DataPackage(int runs, int wins, int max, int delta, String method) {
+    public DataPackage(int runs, int wins, int max, int chances, int delta, String method) {
         this.runs = runs;
         this.wins = wins;
         this.max = max;
+        this.chances = chances;
         this.delta = delta;
         this.method = method;
     }
@@ -22,6 +23,10 @@ public class DataPackage {
 
     public int getMax() {
         return max;
+    }
+
+    public int getChances() {
+        return chances;
     }
 
     public int getDelta() {
